@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.sp
 fun PantallaRegistro(onVolver: () -> Unit) {
     var nombre by remember { mutableStateOf("") }
     var aceptaTerminos by remember { mutableStateOf(false) }
+    // Fondo curvo verde
 
     Column(
         modifier = Modifier

@@ -1,6 +1,7 @@
 package com.example.minutanutricional.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,7 +27,8 @@ fun AppNavigation() {
     var recetaSeleccionada by remember { mutableStateOf<Receta?>(null) }
 
 
-    Surface(modifier = Modifier.fillMaxSize()) {
+    Surface(modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background) {
         when (pantallaActual) {
             "login" -> PantallaLogin(
                 onLoginSuccess = { pantallaActual = "menu" },

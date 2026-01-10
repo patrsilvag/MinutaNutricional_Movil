@@ -1,11 +1,15 @@
 package com.example.minutanutricional.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
@@ -25,18 +29,49 @@ fun TarjetaReceta(
     onCocinar: () -> Unit
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp), // 🔒 altura consistente
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        border = BorderStroke(
+            1.dp,
+            MaterialTheme.colorScheme.secondary
+        ),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(receta.dia, fontWeight = FontWeight.Bold)
-            Text(receta.nombre, fontSize = 18.sp, fontWeight = FontWeight.Medium)
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxSize()
+        ) {
+
+            Text(
+                text = receta.dia,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.primary
+            )
+
+            Text(
+                text = receta.nombre,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
 
             Spacer(modifier = Modifier.height(8.dp))
-            Text("Kcal: ${receta.calorias}")
-            Text("Tip: ${receta.recomendacion}")
 
-            Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                text = receta.recomendacion,
+                fontSize = 13.sp,
+                maxLines = 2
+            )
+
+            // 👇 control visual
+            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.weight(1f))
+
             Button(
                 onClick = onCocinar,
                 modifier = Modifier.fillMaxWidth()
@@ -44,5 +79,6 @@ fun TarjetaReceta(
                 Text("COCINAR")
             }
         }
+
     }
 }
