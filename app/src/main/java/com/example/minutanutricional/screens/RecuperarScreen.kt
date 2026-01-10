@@ -34,32 +34,29 @@ import com.example.minutanutricional.components.CurvedBackground
 fun PantallaRecuperar(onVolver: () -> Unit) {
     var correo by remember { mutableStateOf("") }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-    ) {
-        // Fondo curvo verde
+    // 1. Box para permitir el fondo (igual que en Registro)
+    Box(modifier = Modifier.fillMaxSize()) {
+
+        // 2. Fondo curvo
         CurvedBackground()
 
+        // 3. Columna con la misma configuración que Registro
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 32.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
+                .padding(24.dp), // Cambiado de 32.dp a 24.dp para igualar Registro
+            verticalArrangement = Arrangement.Center // Centrado automático
         ) {
-            // Ajuste para quedar bajo la curva superior (armonía con Login)
-            Spacer(modifier = Modifier.height(180.dp))
+            // Se eliminó el Spacer de 180.dp para que no empuje el texto hacia abajo
 
             Text(
                 text = "Recuperar Clave",
-                fontSize = 24.sp,
+                fontSize = 28.sp, // Aumentado a 28.sp para igualar el título de Registro
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(20.dp)) // Aumentado a 20.dp para igualar Registro
 
             OutlinedTextField(
                 value = correo,
@@ -75,7 +72,7 @@ fun PantallaRecuperar(onVolver: () -> Unit) {
                 onClick = onVolver,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(50.dp)
+                    .height(50.dp) // Mantiene su altura de botón estándar
             ) {
                 Text("ENVIAR CÓDIGO")
             }
