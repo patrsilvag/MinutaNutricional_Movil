@@ -4,5 +4,5 @@ data class Receta(
     val dia: String,
     val nombre: String,
     val calorias: Int,
-    val recomendacion: String
+    val recomendacion: String?
 )

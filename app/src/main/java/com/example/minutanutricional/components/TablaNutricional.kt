@@ -41,6 +41,7 @@ fun TablaNutricional(receta: Receta) {
         HorizontalDivider()
         FilaTabla("Calorías", "${receta.calorias} Kcal")
         HorizontalDivider()
-        FilaTabla("Recomendación", receta.recomendacion)
+        FilaTabla("Recomendación", receta.recomendacion ?: "Sin recomendación disponible")
+
     }
 }

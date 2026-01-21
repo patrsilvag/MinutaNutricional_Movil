@@ -38,7 +38,7 @@ fun PantallaMinuta(
     val recetas = listOf(
         Receta("Lunes", "Lentejas con Arroz", 450, "Rico en hierro."),
         Receta("Martes", "Pollo al Jugo", 350, "Usar poca sal."),
-        Receta("Miércoles", "Charquicán", 300, "Plato completo."),
+        Receta("Miércoles", "Charquicán", 300, null),
         Receta("Jueves", "Pescado al Horno", 280, "Fuente de Omega 3."),
         Receta("Viernes", "Fideos con Salsa", 500, "Cuidar porción.")
     )

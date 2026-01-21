@@ -63,7 +63,7 @@ fun TarjetaReceta(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = receta.recomendacion,
+                text = receta.recomendacion ?: "Sin recomendación disponible",
                 fontSize = 13.sp,
                 maxLines = 2
             )
