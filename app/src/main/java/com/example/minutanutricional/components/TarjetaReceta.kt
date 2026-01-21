@@ -2,18 +2,28 @@ package com.example.minutanutricional.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.MenuBook
+import androidx.compose.material.icons.outlined.CalendarToday
+import androidx.compose.material.icons.outlined.LocalDining
+import androidx.compose.material.icons.outlined.MenuBook
+import androidx.compose.material.icons.outlined.Restaurant
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -28,6 +38,16 @@ fun TarjetaReceta(
     receta: Receta,
     onCocinar: () -> Unit
 ) {
+
+    val iconoDia = when (receta.dia) {
+        "Lunes" -> Icons.Outlined.CalendarToday
+        "Martes" -> Icons.Outlined.Restaurant
+        "Miércoles" -> Icons.Outlined.LocalDining
+        "Jueves" -> Icons.Outlined.Restaurant
+        else -> Icons.AutoMirrored.Outlined.MenuBook
+    }
+
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -47,12 +67,17 @@ fun TarjetaReceta(
                 .fillMaxSize()
         ) {
 
-            Text(
-                text = receta.dia,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.primary
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(iconoDia, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                Spacer(Modifier.width(8.dp))
+                Text(
+                    text = receta.dia,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+
 
             Text(
                 text = receta.nombre,
