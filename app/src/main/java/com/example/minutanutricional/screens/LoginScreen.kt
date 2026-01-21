@@ -70,29 +70,27 @@ fun PantallaLogin(
                 .padding(horizontal = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // ✅ Header invisible que “reserva” espacio bajo la curva
+            //  Header invisible que “reserva” espacio bajo la curva
             Spacer(modifier = Modifier.height(120.dp))
 
-            // ✅ Logo justo bajo la curva
+            //  Logo justo bajo la curva
             Card(
-                shape = RoundedCornerShape(24.dp),
+                shape = RoundedCornerShape(20.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.surface
                 )
             ) {
-                Box(
-                    modifier = Modifier.padding(16.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.logo_minuta),
-                        contentDescription = "Logo Minuta Semanal",
-                        modifier = Modifier.height(80.dp),
-                        contentScale = ContentScale.Fit
-                    )
-                }
+                Image(
+                    painter = painterResource(id = R.drawable.logo_minuta),
+                    contentDescription = "Logo Minuta Semanal",
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp, vertical = 12.dp)
+                        .height(56.dp),
+                    contentScale = ContentScale.Fit
+                )
             }
+
 
 
             Spacer(modifier = Modifier.height(10.dp))
