@@ -53,6 +53,12 @@ fun PantallaMinuta(
         }
     }
 
+    var totalRecetasMostradas = 0
+    for (r in recetasFiltradas) {
+        totalRecetasMostradas++
+    }
+
+
     // Header + Combo fijo, grilla scrolleable
     Column(
         modifier = Modifier
@@ -65,11 +71,13 @@ fun PantallaMinuta(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text("Menú Semanal", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+
             TextButton(onClick = onLogout) { Text("Salir") }
         }
 
         Spacer(modifier = Modifier.height(10.dp))
-        Text("Toca una receta para ver detalles:")
+        Text("Toca una receta para ver detalles (mostradas $totalRecetasMostradas)")
+
         Spacer(modifier = Modifier.height(10.dp))
 
         ComboBoxDia(
