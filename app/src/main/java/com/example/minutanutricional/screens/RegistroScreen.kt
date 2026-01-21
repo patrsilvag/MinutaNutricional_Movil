@@ -15,6 +15,9 @@ import com.example.minutanutricional.components.CurvedBackground
 fun PantallaRegistro(onVolver: () -> Unit) {
     var nombre by remember { mutableStateOf("") }
     var aceptaTerminos by remember { mutableStateOf(false) }
+    var objetivoNutricional by remember { mutableStateOf("Mantener") }
+    val objetivos = listOf("Bajar", "Mantener", "Subir")
+
 
     // 1. Usamos un Box para poder poner el fondo detrás
     Box(modifier = Modifier.fillMaxSize()) {
@@ -49,6 +52,21 @@ fun PantallaRegistro(onVolver: () -> Unit) {
                 )
                 Text("Acepto términos y condiciones")
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text("Objetivo nutricional", fontWeight = FontWeight.SemiBold)
+
+            objetivos.forEach { opcion ->
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(
+                        selected = (objetivoNutricional == opcion),
+                        onClick = { objetivoNutricional = opcion }
+                    )
+                    Text(opcion)
+                }
+            }
+            Text("Seleccionado: $objetivoNutricional")
 
             Spacer(modifier = Modifier.height(20.dp))
 
