@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -36,6 +37,8 @@ import com.example.minutanutricional.components.CurvedBackground
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 
@@ -71,14 +74,26 @@ fun PantallaLogin(
             Spacer(modifier = Modifier.height(120.dp))
 
             // ✅ Logo justo bajo la curva
-            Image(
-                painter = painterResource(id = R.drawable.logo_minuta),
-                contentDescription = "Logo Minuta Semanal",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(120.dp),
-                contentScale = ContentScale.Fit
-            )
+            Card(
+                shape = RoundedCornerShape(24.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surface
+                )
+            ) {
+                Box(
+                    modifier = Modifier.padding(16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.logo_minuta),
+                        contentDescription = "Logo Minuta Semanal",
+                        modifier = Modifier.height(80.dp),
+                        contentScale = ContentScale.Fit
+                    )
+                }
+            }
+
 
             Spacer(modifier = Modifier.height(10.dp))
 
