@@ -47,8 +47,10 @@ fun PantallaMinuta(
     var diaSeleccionado by remember { mutableStateOf("Todos") }
 
     val recetasFiltradas = remember(diaSeleccionado) {
-        if (diaSeleccionado == "Todos") recetas
-        else recetas.filter { it.dia == diaSeleccionado }
+        when (diaSeleccionado) {
+            "Todos" -> recetas
+            else -> recetas.filter { it.dia == diaSeleccionado }
+        }
     }
 
     // Header + Combo fijo, grilla scrolleable
