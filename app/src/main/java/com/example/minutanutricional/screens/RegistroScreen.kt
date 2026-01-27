@@ -18,6 +18,10 @@ fun PantallaRegistro(onVolver: () -> Unit) {
     var objetivoNutricional by remember { mutableStateOf("Mantener") }
     val objetivos = listOf("Bajar", "Mantener", "Subir")
 
+    var errorNombre by remember { mutableStateOf<String?>(null) }
+    var errorTerminos by remember { mutableStateOf<String?>(null) }
+    var mensajeOk by remember { mutableStateOf<String?>(null) }
+
 
     // 1. Usamos un Box para poder poner el fondo detrás
     Box(modifier = Modifier.fillMaxSize()) {
@@ -38,10 +42,17 @@ fun PantallaRegistro(onVolver: () -> Unit) {
 
             OutlinedTextField(
                 value = nombre,
-                onValueChange = { nombre = it },
+                onValueChange = {
+                    nombre = it
+                    errorNombre = null
+                    mensajeOk = null
+                },
                 label = { Text("Nombre Completo") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                isError = errorNombre != null,
+                supportingText = { errorNombre?.let { Text(it) } }
             )
+
 
             Spacer(modifier = Modifier.height(10.dp))
 
@@ -51,6 +62,9 @@ fun PantallaRegistro(onVolver: () -> Unit) {
                     onCheckedChange = { aceptaTerminos = it }
                 )
                 Text("Acepto términos y condiciones")
+            }
+            errorTerminos?.let {
+                Text(text = it, color = MaterialTheme.colorScheme.error, fontSize = 13.sp)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -71,11 +85,28 @@ fun PantallaRegistro(onVolver: () -> Unit) {
             Spacer(modifier = Modifier.height(20.dp))
 
             Button(
-                onClick = onVolver,
+                onClick = {
+                    val n = nombre.trim()
+
+                    errorNombre = when {
+                        n.isBlank() -> "Ingrese su nombre"
+                        n.length < 3 -> "Nombre muy corto"
+                        else -> null
+                    }
+
+                    errorTerminos = when {
+                        !aceptaTerminos -> "Debe aceptar términos y condiciones"
+                        else -> null
+                    }
+
+                    if (errorNombre == null && errorTerminos == null) {
+                        mensajeOk = "Registro válido (simulado)"
+                        onVolver()
+                    }
+                },
                 modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("GUARDAR Y VOLVER")
-            }
+            ) { Text("GUARDAR Y VOLVER") }
+
         }
     }
 }

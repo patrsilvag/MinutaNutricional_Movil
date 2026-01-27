@@ -33,6 +33,14 @@ import com.example.minutanutricional.components.CurvedBackground
 @Composable
 fun PantallaRecuperar(onVolver: () -> Unit) {
     var correo by remember { mutableStateOf("") }
+    var errorCorreo by remember { mutableStateOf<String?>(null) }
+    var mensajeOk by remember { mutableStateOf<String?>(null) }
+
+    fun esCorreoValido(c: String): Boolean {
+        val t = c.trim()
+        return t.contains("@") && t.contains(".") && t.length >= 6
+    }
+
 
     // 1. Box para permitir el fondo (igual que en Registro)
     Box(modifier = Modifier.fillMaxSize()) {
@@ -60,22 +68,45 @@ fun PantallaRecuperar(onVolver: () -> Unit) {
 
             OutlinedTextField(
                 value = correo,
-                onValueChange = { correo = it },
+                onValueChange = {
+                    correo = it
+                    errorCorreo = null
+                    mensajeOk = null
+                },
                 label = { Text("Correo Electrónico") },
                 modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                isError = errorCorreo != null,
+                supportingText = { errorCorreo?.let { Text(it) } }
             )
+
 
             Spacer(modifier = Modifier.height(20.dp))
 
             Button(
-                onClick = onVolver,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp) // Mantiene su altura de botón estándar
-            ) {
-                Text("ENVIAR CÓDIGO")
+                onClick = {
+                    val c = correo.trim()
+
+                    errorCorreo = when {
+                        c.isBlank() -> "Ingrese su correo"
+                        !esCorreoValido(c) -> "Correo no válido"
+                        else -> null
+                    }
+
+                    if (errorCorreo == null) {
+                        mensajeOk = "Código enviado (simulado)"
+                        // Si quieres volver inmediatamente, deja onVolver() aquí.
+                        // Si quieres que el usuario vea el mensaje, NO vuelvas altiro.
+                    }
+                },
+                modifier = Modifier.fillMaxWidth().height(50.dp)
+            ) { Text("ENVIAR CÓDIGO") }
+
+            Spacer(modifier = Modifier.height(10.dp))
+            mensajeOk?.let {
+                Text(text = it, color = MaterialTheme.colorScheme.primary, fontSize = 13.sp)
             }
+
         }
     }
 }
