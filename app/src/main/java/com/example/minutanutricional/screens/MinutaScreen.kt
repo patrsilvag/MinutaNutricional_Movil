@@ -35,14 +35,14 @@ fun PantallaMinuta(
     onLogout: () -> Unit,
     onVerDetalle: (Receta) -> Unit
 ) {
-    val recetas = listOf(
+    val recetasArray = arrayOf(
         Receta("Lunes", "Lentejas con Arroz", 450, "Rico en hierro."),
         Receta("Martes", "Pollo al Jugo", 350, "Usar poca sal."),
         Receta("Miércoles", "Charquicán", 300, null),
         Receta("Jueves", "Pescado al Horno", 280, "Fuente de Omega 3."),
         Receta("Viernes", "Fideos con Salsa", 500, "Cuidar porción.")
     )
-
+    val recetas = recetasArray.toList()
     val dias = listOf("Todos", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes")
     var diaSeleccionado by remember { mutableStateOf("Todos") }
 
@@ -76,7 +76,9 @@ fun PantallaMinuta(
         }
 
         Spacer(modifier = Modifier.height(10.dp))
-        Text("Toca una receta para ver detalles (mostradas $totalRecetasMostradas)")
+        Text("Toca una receta para ver detalles")
+        Text("Mostrando $totalRecetasMostradas de ${recetas.size} recetas")
+
 
         Spacer(modifier = Modifier.height(10.dp))
 
