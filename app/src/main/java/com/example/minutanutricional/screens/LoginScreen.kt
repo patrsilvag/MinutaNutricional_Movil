@@ -54,6 +54,10 @@ fun PantallaLogin(
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
 
+    var errorUsuario by remember { mutableStateOf<String?>(null) }
+    var errorPassword by remember { mutableStateOf<String?>(null) }
+    var errorGeneral by remember { mutableStateOf<String?>(null) }
+
 
     Box(
         modifier = Modifier
@@ -106,22 +110,36 @@ fun PantallaLogin(
 
             OutlinedTextField(
                 value = usuario,
-                onValueChange = { usuario = it },
+                onValueChange = {
+                    usuario = it
+                    errorUsuario = null
+                    errorGeneral = null
+                },
                 label = { Text("Usuario") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                isError = errorUsuario != null,
+                supportingText = {
+                    errorUsuario?.let { Text(it) }
+                }
             )
+
 
             Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedTextField(
                 value = password,
-                onValueChange = { password = it },
+                onValueChange = {
+                    password = it
+                    errorPassword = null
+                    errorGeneral = null
+                },
                 label = { Text("Contraseña") },
                 modifier = Modifier.fillMaxWidth(),
-                visualTransformation = if (passwordVisible)
-                    VisualTransformation.None
-                else
-                    PasswordVisualTransformation(),
+                isError = errorPassword != null,
+                supportingText = {
+                    errorPassword?.let { Text(it) }
+                },
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 trailingIcon = {
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
@@ -143,7 +161,27 @@ fun PantallaLogin(
             Spacer(modifier = Modifier.height(22.dp))
 
             Button(
-                onClick = onLoginSuccess,
+                onClick = {
+                    val u = usuario.trim()
+                    val p = password.trim()
+
+                    errorUsuario = when {
+                        u.isBlank() -> "Ingrese usuario"
+                        else -> null
+                    }
+
+                    errorPassword = when {
+                        p.isBlank() -> "Ingrese contraseña"
+                        p.length < 4 -> "Contraseña muy corta"
+                        else -> null
+                    }
+
+                    if (errorUsuario == null && errorPassword == null) {
+                        onLoginSuccess()
+                    } else {
+                        errorGeneral = "Revise los campos marcados"
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
@@ -151,7 +189,18 @@ fun PantallaLogin(
                 Text("INGRESAR")
             }
 
+
             Spacer(modifier = Modifier.height(16.dp))
+
+            errorGeneral?.let {
+                Text(
+                    text = it,
+                    color = MaterialTheme.colorScheme.error,
+                    fontSize = 13.sp
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+
 
             Text(
                 text = "¿Olvidaste tu contraseña?",
