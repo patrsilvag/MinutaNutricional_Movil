@@ -20,6 +20,7 @@ import com.example.minutanutricional.screens.PantallaDetalle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.minutanutricional.viewmodel.AuthViewModel
 
+import androidx.navigation.compose.rememberNavController
 
 // --------------------
 // NAVEGACIÓN SIMPLE
@@ -34,7 +35,7 @@ fun AppNavigation() {
         )
     }
 
-
+    val navController = rememberNavController() // Verifica que el nombre sea este
     var recetaSeleccionada by remember { mutableStateOf<Receta?>(null) }
 
 
@@ -50,7 +51,7 @@ fun AppNavigation() {
 
             "registro" -> PantallaRegistro(onVolver = { pantallaActual = "login" })
 
-            "recuperar" -> PantallaRecuperar(onVolver = { pantallaActual = "login" })
+            "recuperar" -> PantallaRecuperar(navController = navController,authViewModel = authViewModel)
 
             "menu" -> PantallaMinuta(
                 onLogout = {

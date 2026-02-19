@@ -27,11 +27,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.minutanutricional.components.CurvedBackground
 
+import androidx.navigation.NavController
+import com.example.minutanutricional.viewmodel.AuthViewModel
+
+
+
+
 // --------------------
 // RECUPERAR
 // --------------------
 @Composable
-fun PantallaRecuperar(onVolver: () -> Unit) {
+fun PantallaRecuperar(navController: NavController,
+                      authViewModel: AuthViewModel) {
     var correo by remember { mutableStateOf("") }
     var errorCorreo by remember { mutableStateOf<String?>(null) }
     var mensajeOk by remember { mutableStateOf<String?>(null) }
@@ -83,24 +90,31 @@ fun PantallaRecuperar(onVolver: () -> Unit) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
+            // Asegúrate de recibir authViewModel: AuthViewModel en los parámetros de la función
             Button(
                 onClick = {
                     val c = correo.trim()
-
-                    errorCorreo = when {
-                        c.isBlank() -> "Ingrese su correo"
-                        !esCorreoValido(c) -> "Correo no válido"
-                        else -> null
-                    }
-
-                    if (errorCorreo == null) {
-                        mensajeOk = "Código enviado (simulado)"
-                        // Si quieres volver inmediatamente, deja onVolver() aquí.
-                        // Si quieres que el usuario vea el mensaje, NO vuelvas altiro.
+                    if (esCorreoValido(c)) {
+                        authViewModel.recuperarClave(
+                            email = c,
+                            onSuccess = {
+                                mensajeOk = "Se ha enviado un correo para restablecer tu clave."
+                                errorCorreo = null
+                            },
+                            onError = { error ->
+                                errorCorreo = error
+                                mensajeOk = null
+                            }
+                        )
+                    } else {
+                        errorCorreo = "Correo no válido"
                     }
                 },
-                modifier = Modifier.fillMaxWidth().height(50.dp)
-            ) { Text("ENVIAR CÓDIGO") }
+                modifier = Modifier.fillMaxWidth().height(50.dp),
+                enabled = !authViewModel.isLoading // Deshabilitar mientras carga
+            ) {
+                Text(if (authViewModel.isLoading) "ENVIANDO..." else "ENVIAR CORREO REAL")
+            }
 
             Spacer(modifier = Modifier.height(10.dp))
             mensajeOk?.let {
