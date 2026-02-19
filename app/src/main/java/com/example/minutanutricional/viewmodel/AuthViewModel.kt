@@ -29,4 +29,14 @@ class AuthViewModel : ViewModel() {
                 errorMessage = "Error: Credenciales inválidas o problema de red."
             }
     }
+
+    fun isUserLoggedIn(): Boolean {
+        return AuthManager.auth.currentUser != null
+    }
+
+    fun logout() {
+        AuthManager.auth.signOut()
+    }
+
+
 }

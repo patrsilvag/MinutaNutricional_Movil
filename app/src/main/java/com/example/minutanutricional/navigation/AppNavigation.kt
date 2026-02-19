@@ -21,17 +21,22 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.minutanutricional.viewmodel.AuthViewModel
 
 
-
-
 // --------------------
 // NAVEGACIÓN SIMPLE
 // --------------------
 @Composable
 fun AppNavigation() {
-    var pantallaActual by remember { mutableStateOf("login") }
+    val authViewModel: AuthViewModel = viewModel()
+
+    var pantallaActual by remember {
+        mutableStateOf(
+            if (authViewModel.isUserLoggedIn()) "menu" else "login"
+        )
+    }
+
+
     var recetaSeleccionada by remember { mutableStateOf<Receta?>(null) }
 
-    val authViewModel: AuthViewModel = viewModel()
 
     Surface(modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background) {
@@ -48,7 +53,10 @@ fun AppNavigation() {
             "recuperar" -> PantallaRecuperar(onVolver = { pantallaActual = "login" })
 
             "menu" -> PantallaMinuta(
-                onLogout = { pantallaActual = "login" },
+                onLogout = {
+                    authViewModel.logout()
+                    pantallaActual = "login"
+                },
                 onVerDetalle = { receta: Receta ->
                     recetaSeleccionada = receta
                     pantallaActual = "detalle"
