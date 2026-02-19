@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,6 +28,11 @@ import com.example.minutanutricional.model.Receta
 import com.example.minutanutricional.components.ComboBoxDia
 import com.example.minutanutricional.components.TarjetaReceta
 
+import com.example.minutanutricional.data.RecetaRepository
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+
 // --------------------
 // MENÚ (GRILLA) + FILTRO
 // --------------------
@@ -35,50 +41,45 @@ fun PantallaMinuta(
     onLogout: () -> Unit,
     onVerDetalle: (Receta) -> Unit
 ) {
-    val recetasArray = arrayOf(
-        Receta("Lunes", "Lentejas con Arroz", 450, "Rico en hierro."),
-        Receta("Martes", "Pollo al Jugo", 350, "Usar poca sal."),
-        Receta("Miércoles", "Charquicán", 300, null),
-        Receta("Jueves", "Pescado al Horno", 280, "Fuente de Omega 3."),
-        Receta("Viernes", "Fideos con Salsa", 500, "Cuidar porción.")
-    )
-    val recetas = recetasArray.toList()
-    val dias = listOf("Todos", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes")
+    var recetas by remember { mutableStateOf<List<Receta>>(emptyList()) }
     var diaSeleccionado by remember { mutableStateOf("Todos") }
 
-    val recetasFiltradas = remember(diaSeleccionado) {
+    val dias = listOf("Todos", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes")
+
+    // 🔥 Firebase Realtime Database
+    LaunchedEffect(Unit) {
+        RecetaRepository.escucharRecetas { lista ->
+            recetas = lista
+        }
+    }
+
+    val recetasFiltradas = remember(recetas, diaSeleccionado) {
         when (diaSeleccionado) {
             "Todos" -> recetas
             else -> recetas.filter { it.dia == diaSeleccionado }
         }
     }
 
-    var totalRecetasMostradas = 0
-    for (r in recetasFiltradas) {
-        totalRecetasMostradas++
-    }
+    val totalRecetasMostradas = recetasFiltradas.size
 
-
-    // Header + Combo fijo, grilla scrolleable
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text("Menú Semanal", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-
             TextButton(onClick = onLogout) { Text("Salir") }
         }
 
         Spacer(modifier = Modifier.height(10.dp))
         Text("Toca una receta para ver detalles")
         Text("Mostrando $totalRecetasMostradas de ${recetas.size} recetas")
-
 
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -91,7 +92,7 @@ fun PantallaMinuta(
         Spacer(modifier = Modifier.height(12.dp))
 
         LazyVerticalGrid(
-            columns = GridCells.Fixed(2), // 2 columnas en phone (legible)
+            columns = GridCells.Fixed(2),
             modifier = Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
