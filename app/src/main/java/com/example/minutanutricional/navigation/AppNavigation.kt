@@ -17,6 +17,11 @@ import com.example.minutanutricional.screens.PantallaRecuperar
 import com.example.minutanutricional.screens.PantallaMinuta
 import com.example.minutanutricional.screens.PantallaDetalle
 
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.minutanutricional.viewmodel.AuthViewModel
+
+
+
 
 // --------------------
 // NAVEGACIÓN SIMPLE
@@ -26,11 +31,13 @@ fun AppNavigation() {
     var pantallaActual by remember { mutableStateOf("login") }
     var recetaSeleccionada by remember { mutableStateOf<Receta?>(null) }
 
+    val authViewModel: AuthViewModel = viewModel()
 
     Surface(modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background) {
         when (pantallaActual) {
             "login" -> PantallaLogin(
+                authViewModel = authViewModel,
                 onLoginSuccess = { pantallaActual = "menu" },
                 onIrARegistro = { pantallaActual = "registro" },
                 onIrARecuperar = { pantallaActual = "recuperar" }
@@ -62,3 +69,4 @@ fun AppNavigation() {
         }
     }
 }
+

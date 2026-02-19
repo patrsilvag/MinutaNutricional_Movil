@@ -75,5 +75,7 @@ dependencies {
 
     // Firebase Realtime Database
     implementation("com.google.firebase:firebase-database")
+// ViewModel para Jetpack Compose
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6")
 
 }

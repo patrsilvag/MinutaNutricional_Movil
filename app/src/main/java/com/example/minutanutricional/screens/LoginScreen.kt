@@ -41,11 +41,14 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import com.example.minutanutricional.viewmodel.AuthViewModel
+
 
 
 
 @Composable
 fun PantallaLogin(
+    authViewModel: AuthViewModel,
     onLoginSuccess: () -> Unit,
     onIrARegistro: () -> Unit,
     onIrARecuperar: () -> Unit
@@ -177,7 +180,9 @@ fun PantallaLogin(
                     }
 
                     if (errorUsuario == null && errorPassword == null) {
-                        onLoginSuccess()
+                        authViewModel.login(u, p) {
+                            onLoginSuccess()
+                        }
                     } else {
                         errorGeneral = "Revise los campos marcados"
                     }
@@ -192,7 +197,8 @@ fun PantallaLogin(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            errorGeneral?.let {
+
+            authViewModel.errorMessage?.let {
                 Text(
                     text = it,
                     color = MaterialTheme.colorScheme.error,
