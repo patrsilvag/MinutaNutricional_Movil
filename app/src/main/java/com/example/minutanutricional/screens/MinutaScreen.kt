@@ -32,7 +32,9 @@ import com.example.minutanutricional.data.RecetaRepository
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-
+import androidx.compose.ui.platform.LocalContext
+import android.content.Context
+import androidx.core.content.edit
 // --------------------
 // MENÚ (GRILLA) + FILTRO
 // --------------------
@@ -41,6 +43,17 @@ fun PantallaMinuta(
     onLogout: () -> Unit,
     onVerDetalle: (Receta) -> Unit
 ) {
+    val context = LocalContext.current
+    val prefs = remember {
+        context.getSharedPreferences("prefs", Context.MODE_PRIVATE)
+    }
+
+    var objetivo by remember {
+        mutableStateOf(
+            prefs.getString("objetivo", "Mantener peso") ?: "Mantener peso"
+        )
+    }
+
     var recetas by remember { mutableStateOf<List<Receta>>(emptyList()) }
     var diaSeleccionado by remember { mutableStateOf("Todos") }
 
@@ -48,9 +61,15 @@ fun PantallaMinuta(
 
     // 🔥 Firebase Realtime Database
     LaunchedEffect(Unit) {
-        RecetaRepository.escucharRecetas { lista ->
-            recetas = lista
-        }
+        // Asegúrate de que el bloque esté así:
+        RecetaRepository.escucharRecetas(
+            onSuccess = { lista ->
+                recetas = lista
+            },
+            onError = {
+                // Opcional: manejar error aquí
+            }
+        )
     }
 
     val recetasFiltradas = remember(recetas, diaSeleccionado) {
@@ -74,10 +93,22 @@ fun PantallaMinuta(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text("Menú Semanal", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-            TextButton(onClick = onLogout) { Text("Salir") }
+            TextButton(onClick = {
+                prefs.edit {
+                    putString("objetivo", objetivo)
+                }
+                onLogout()
+            }) {
+                Text("Cerrar Sesión")
+            }
         }
+        Text(
+            text = "Objetivo nutricional: $objetivo",
+            fontSize = 14.sp
+        )
 
-        Spacer(modifier = Modifier.height(10.dp))
+
+        Spacer(modifier = Modifier.height(8.dp))
         Text("Toca una receta para ver detalles")
         Text("Mostrando $totalRecetasMostradas de ${recetas.size} recetas")
 
