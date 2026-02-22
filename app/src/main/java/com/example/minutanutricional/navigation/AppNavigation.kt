@@ -51,7 +51,7 @@ fun AppNavigation() {
 
             "registro" -> PantallaRegistro(onVolver = { pantallaActual = "login" })
 
-            "recuperar" -> PantallaRecuperar(navController = navController,authViewModel = authViewModel)
+            "recuperar" -> PantallaRecuperar(authViewModel = authViewModel,    onVolverLogin = { pantallaActual = "login" })
 
             "menu" -> PantallaMinuta(
                 onLogout = {
